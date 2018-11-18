@@ -28,7 +28,7 @@
             ));
         }
     
-    //list = productos.get();
+    list = productos.get();
 %>
 <html>
     <head>

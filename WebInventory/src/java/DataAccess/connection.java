@@ -8,6 +8,8 @@ package DataAccess;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.SQLException;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 /**
  *
  * @author admin
@@ -22,14 +24,21 @@ public class connection {
     }
     
     //Metodo para conectar con la base de datos
-    public void Conectar() throws SQLException, ClassNotFoundException {
+    public void Conectar(){
 
-        String cadena = "jdbc:postgresql://127.0.0.1:49315/inventariodb";
-        
-        
-        //DriverManager.registerDriver(new org.postgresql.Driver());
-        Class.forName("org.postgresql.Driver");
-        this.conn = DriverManager.getConnection(cadena, "postgres", "diego1993");
+        try {
+            String cadena = "jdbc:postgresql://127.0.0.1:49315/inventariodb";
+            
+            
+            DriverManager.registerDriver(new org.postgresql.Driver());
+            //Class.forName("org.postgresql.Driver");
+            this.conn = DriverManager.getConnection(cadena, "postgres", "diego1993");
+            if(this.conn != null)
+                System.out.println("conexion correcta");
+        } catch (SQLException ex) {
+            System.out.println(ex);
+            Logger.getLogger(connection.class.getName()).log(Level.SEVERE, null, ex);
+        }
     }
     
     public Connection getConexion(){
