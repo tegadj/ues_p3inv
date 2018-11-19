@@ -33,7 +33,7 @@
 <html>
     <head>
         <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
-        <title>Ferreteria - registro de productos</title>
+        <title>Ferreteria - registro de ventas</title>
         <meta charset="UTF-8">
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
         <link rel="stylesheet" href="css/master.css">
@@ -72,31 +72,30 @@
         
         <div class="container">
             <div class="row">
-                <div class="col-sm-4">
-                    &nbsp;
-                </div>
-                <div class="col-sm-4 col-md-offset-4">
+             
+                <div class="col-sm-12">
                     <form method="post" >
                         <div class="registro">
                             <div class="col-sm-12" >
                                 <img class="avatar" src="img/logo.png" alt="">
 
-                                <h1>REGISTRO DE PRODUCTOS</h1>
+                                <h1>REGISTRO DE VENTAS</h1>
 
-                                <!--USERNAME-->
-                                <label for="username">Nombre del producto</label>
-                                <input type="text" placeholder="Ingrese el nombre del producto" name="txtNombre">
+                                <div class="col-sm-6">
+                                    <label>Nombre del cliente</label>
+                                    <input type="text" placeholder="Ingrese el nombre del cliente" name="txtNombre">
 
-                                <!--PASSWORD-->
-                                <label for="precioventa">Precio de venta</label>
-                                <input type="text" placeholder="Ingreso el precio de venta" name="txtPrecioV">
+                                </div>
+                                <div class="col-sm-6">
+                                    <label for="username">No Factura</label>
+                                    <input type="text" placeholder="No de Factura" name="txtFactura">
 
-                                <label for="preciocompra">Precio de compra</label>
-                                <input type="text" placeholder="Ingrese el precio de compra" name="txtPrecioC">
-
-                                <label for="existencia">Existencia</label>
-                                <input type="text" placeholder="Ingrese la cantidad de existencia" name="txtExistencia">
-
+                                </div>
+                                <div class="col-sm-6">
+                                    <label for="username">Fecha</label>
+                                    <input type="text" placeholder="Fecha" name="txtFecha">
+                                </div>
+                                
                                 <input type="submit" name="add" value="REGISTRAR" onclick="swal('success', 'ok', 'success')">
                             </div>
                         </div>

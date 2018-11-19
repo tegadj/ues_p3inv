@@ -27,16 +27,19 @@ public class connection {
     public void Conectar(){
 
         try {
-            String cadena = "jdbc:postgresql://127.0.0.1:49315/inventariodb";
+            String cadena = "jdbc:postgresql://127.0.0.1:5432/inventarioDB";
+             // String cadena = "jdbc:postgresql://shefjekp:OyUnK8lQOcWme8VnR-eZubq-Ua4Lrf4h@baasu.db.elephantsql.com:5432/shefjekp";
             
             
-            DriverManager.registerDriver(new org.postgresql.Driver());
-            //Class.forName("org.postgresql.Driver");
+            //DriverManager.registerDriver(new org.postgresql.Driver());
+            Class.forName("org.postgresql.Driver").newInstance();
             this.conn = DriverManager.getConnection(cadena, "postgres", "diego1993");
             if(this.conn != null)
                 System.out.println("conexion correcta");
         } catch (SQLException ex) {
             System.out.println(ex);
+            Logger.getLogger(connection.class.getName()).log(Level.SEVERE, null, ex);
+        } catch (ClassNotFoundException | InstantiationException | IllegalAccessException ex) {
             Logger.getLogger(connection.class.getName()).log(Level.SEVERE, null, ex);
         }
     }
