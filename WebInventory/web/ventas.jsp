@@ -4,31 +4,20 @@
     Author     : admin
 --%>
 
+<%@page import="Entities.transaccion"%>
 <%@page import="BusinessLogic.ProductosBL"%>
 <%@page import="java.util.ArrayList"%>
 <%@page import="Entities.producto"%>
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
-<jsp:useBean id="productos" scope="session" class="BusinessLogic.ProductosBL"></jsp:useBean>
+<jsp:useBean id="tran" scope="session" class="BusinessLogic.TransaccionesBL"></jsp:useBean>
 <!DOCTYPE html>
 <%
     //productos = new ProductosBL();
     
-    ArrayList<producto> list = new ArrayList();
-    list.add(new producto(
-    1, "asd",1,1,1
-    ));
-    if(request != null)
-        if(request.getParameter("add") != null)
-        {
-            productos.add(new producto(0,
-                    request.getParameter("txtNombre"),
-                    Double.parseDouble(request.getParameter("txtPrecioV")),
-                    Double.parseDouble(request.getParameter("txtPrecioC")),
-                    Integer.parseInt(request.getParameter("txtExistencia"))
-            ));
-        }
+    ArrayList<transaccion> list = new ArrayList();
     
-    list = productos.get();
+    
+    list = tran.getVentas();
 %>
 <html>
     <head>
@@ -54,10 +43,10 @@
                   <a class="nav-link" href="index.html">Home</a>
                 </li>
                 <li class="nav-item active">
-                  <a class="nav-link" href="productos.jsp">Productos<span class="sr-only">(current)</span></a>
+                  <a class="nav-link" href="productos.jsp">Productos</a>
                 </li>
                <li class="nav-item">
-                  <a class="nav-link" href="ventas.jsp">Ventas</a>
+                  <a class="nav-link" href="ventas.jsp">Ventas<span class="sr-only">(current)</span></a>
                 </li>
                   <li class="nav-item">
                   <a class="nav-link" href="compras.jsp">Compras</a>
@@ -104,25 +93,26 @@
             </div>
             <div class="row">
                 <div class="col-sm-12">
+                    <h1>Listado de ventas</h1>
                     <br>
                     <table class="table">
                         <thead>
                             <tr>
-                                <th>Código</th>
-                                <th>Producto</th>
-                                <th>Precio unitario</th>
-                                <th>Existencia</th>
+                                <th>Cliente</th>
+                                <th>No factura</th>
+                                <th>Fecha</th>
+                                <th></th>
                             </tr>
                         </thead>
                         <tbody>
                             <%
-                            for(producto p: list)
+                            for(transaccion p: list)
                             {
                                 out.println("<tr>");
-                                 out.println("<td>" + p.getCodigoP()+ "</td>");
-                                out.println("<td>" + p.getNombreP() + "</td>");
-                                out.println("<td>" + p.getPrecioV()+ "</td>");
-                                out.println("<td>" + p.getExistencia()+ "</td>");
+                                 out.println("<td>" + p.getNombre()+ "</td>");
+                                out.println("<td>" + p.getFactura() + "</td>");
+                                out.println("<td>" + p.getFecha()+ "</td>");
+                                out.println("<td><a class='btn btn-danger' href='viewVenta.jsp?id=" + p.getId()+ "'>Ver</a></td>");
                                 out.println("</tr>");
                             }
                             %>

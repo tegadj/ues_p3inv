@@ -14,9 +14,7 @@
     //productos = new ProductosBL();
     
     ArrayList<producto> list = new ArrayList();
-    list.add(new producto(
-    1, "asd",1,1,1
-    ));
+   
     if(request != null)
         if(request.getParameter("add") != null)
         {

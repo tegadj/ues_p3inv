@@ -73,5 +73,34 @@ public class ProductoAD {
     }
     return list;
     }
+    
+    public producto getById(String id){
+       ArrayList<producto> list = new ArrayList();
+
+    try{
+        
+        Statement stm = conexion.createStatement();
+        ResultSet rs = stm.executeQuery("select codigoproducto, nombreproducto, precioVenta, "
+                + "precioCompra, existencia from productos where codigoproducto = " + id);
+
+        while(rs.next())
+        {
+            producto p = new producto(
+                rs.getInt("codigoproducto"),
+                rs.getString("nombreproducto"),
+                rs.getDouble("precioVenta"),
+                rs.getDouble("precioCompra"),
+                rs.getInt("existencia")
+                );
+            list.add(p);
+          
+        }
+    }
+    catch(Exception e)
+    {
+        
+    }
+    return list.get(0);
+    }
 }
 
