@@ -35,20 +35,20 @@ public class TransactionAD {
                     + " values ('"+p.getNombre() + "', "
                     + "now(), "
                     + "'"+p.getFactura()+"', "
-                    + "'venta');";
+                    + "'"+ p.getTipo()+"');";
             prepararSentencia = this.conexion.prepareStatement(cadenaSql);
             prepararSentencia.executeUpdate();
             
             //Devolver el ultimo registro
             Statement stm = conexion.createStatement();
-            ResultSet rs = stm.executeQuery("select max(idtransaccion) id"
-                + "from transacciones " +
+            ResultSet rs = stm.executeQuery("select max(idtransaccion)"
+                + " from transacciones " +
                   " where nombre = '" + p.getNombre() + "'");
 
             int id = 0;
             while(rs.next())
             {
-               id = rs.getInt("id");
+               id = rs.getInt(1);
 
             }
             return id;
@@ -57,16 +57,25 @@ public class TransactionAD {
         return 0;
     }
     
-     public void AddDetails(detalle p) throws SQLException, ClassNotFoundException{
+     public void AddDetails(detalle p, String tipo) throws SQLException, ClassNotFoundException{
         PreparedStatement prepararSentencia = null;
         try{
-            String cadenaSql="insert into \"public\".\"detalleTran\" "
+            String cadenaSql="insert into detalleTran "
                     + "(idtransaccion, idproducto, cantidad) "
                     + "values ("+p.getIdTransaccion()+", "+p.getIdProducto()+", "+p.getCantidad()+");";
             prepararSentencia = this.conexion.prepareStatement(cadenaSql);
             prepararSentencia.executeUpdate();
+            
+            //Modificar inventario
+            
+            
+            cadenaSql="update productos set existencia = existencia " + (tipo=="venta"? " - ": " + ") + p.getCantidad() + " where codigoProducto = " + p.getIdProducto();
+            prepararSentencia = this.conexion.prepareStatement(cadenaSql);
+            prepararSentencia.executeUpdate();
         }
-        catch(Exception e){}
+        catch(Exception e){
+            System.out.println(e.toString());
+        }
     }
     
    public ArrayList<detalle> getDetails(String id)
@@ -78,7 +87,7 @@ public class TransactionAD {
         Statement stm = conexion.createStatement();
         ResultSet rs = stm.executeQuery("select idtransaccion, "
                 + "idproducto, "
-                + "cantidad from \"public\".\"detalleTran\" " +
+                + "cantidad from detalleTran" +
                   " where idtransaccion = " + id);
 
         ProductoAD pAD = new ProductoAD();
@@ -90,7 +99,8 @@ public class TransactionAD {
                 rs.getInt("idproducto"),
                 p.getPrecioV() * rs.getInt("cantidad"),
                 rs.getInt("cantidad"),
-                p.getNombreP()
+                p.getNombreP(),
+                p.getPrecioC() * rs.getInt("cantidad")
                 );
             list.add(d);
           
@@ -157,7 +167,7 @@ public class TransactionAD {
                 + "numerofac, "
                 + "tipo "
                 + "from transacciones " +
-                  " where tipo = 'venta'");
+                  " where tipo = 'compra'");
 
         while(rs.next())
         {

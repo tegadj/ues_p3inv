@@ -42,10 +42,10 @@
                 <li class="nav-item">
                   <a class="nav-link" href="index.html">Home</a>
                 </li>
-                <li class="nav-item active">
+                <li class="nav-item">
                   <a class="nav-link" href="productos.jsp">Productos</a>
                 </li>
-               <li class="nav-item">
+               <li class="nav-item active">
                   <a class="nav-link" href="ventas.jsp">Ventas<span class="sr-only">(current)</span></a>
                 </li>
                   <li class="nav-item">
@@ -61,35 +61,7 @@
         
         <div class="container">
             <div class="row">
-             
-                <!--<div class="col-sm-12">
-                    <form method="post" >
-                        <div class="registro">
-                            <div class="col-sm-12" >
-                                <img class="avatar" src="img/logo.png" alt="">
-
-                                <h1>REGISTRO DE VENTAS</h1>
-
-                                <div class="col-sm-6">
-                                    <label>Nombre del cliente</label>
-                                    <input type="text" placeholder="Ingrese el nombre del cliente" name="txtNombre">
-
-                                </div>
-                                <div class="col-sm-6">
-                                    <label for="username">No Factura</label>
-                                    <input type="text" placeholder="No de Factura" name="txtFactura">
-
-                                </div>
-                                <div class="col-sm-6">
-                                    <label for="username">Fecha</label>
-                                    <input type="text" placeholder="Fecha" name="txtFecha">
-                                </div>
-                               
-                                <input type="submit" name="add" value="REGISTRAR" onclick="swal('success', 'ok', 'success')">
-                            </div>
-                        </div>
-                    </form>
-                </div>-->
+            
             </div>
             <div class="row">
                 <div class="col-sm-12">
@@ -113,7 +85,7 @@
                                  out.println("<td>" + p.getNombre()+ "</td>");
                                 out.println("<td>" + p.getFactura() + "</td>");
                                 out.println("<td>" + p.getFecha()+ "</td>");
-                                out.println("<td><a class='btn btn-danger' href='viewVenta.jsp?id=" + p.getId()+ "'>Ver</a></td>");
+                                out.println("<td><a class='btn btn-danger' href='viewVenta.jsp?id=" + p.getId()+ "'>Ver Detalle</a></td>");
                                 out.println("</tr>");
                             }
                             %>

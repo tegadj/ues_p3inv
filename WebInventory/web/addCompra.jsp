@@ -29,13 +29,32 @@
         t = tran.getById(request.getParameter("id"));
     }
     
-    
+    //Guardar el encabezado de la transaccion
+     if(request.getParameter("save") != null)
+    {
+            id = tran.insert(new transaccion(0,
+            request.getParameter("txtNombre"),
+            new Date(),
+            request.getParameter("txtFactura"),
+            "compra"
+        ));
+        response.sendRedirect("addCompra.jsp?id=" + id);
+    }
+     //Agregar detalles
+    if(request.getParameter("add") != null)
+    {
+            tran.addDetail(new detalle(id,
+            Integer.parseInt( request.getParameter("productoId")),
+            Integer.parseInt(request.getParameter("txtCantidad"))
+        ), "compra");
+        response.sendRedirect("addCompra.jsp?id=" + id);
+    }
 %>
 
 <html>
     <head>
         <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
-        <title>Ferreteria - nueva venta</title>
+        <title>Ferreteria - nueva compra</title>
         <meta charset="UTF-8">
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
         <link rel="stylesheet" href="css/master.css">
@@ -58,11 +77,11 @@
                 <li class="nav-item">
                   <a class="nav-link" href="productos.jsp">Productos</a>
                 </li>
-               <li class="nav-item active">
-                  <a class="nav-link" href="ventas.jsp">Ventas<span class="sr-only">(current)</span></a>
+               <li class="nav-item ">
+                  <a class="nav-link" href="ventas.jsp">Ventas</a>
                 </li>
-                  <li class="nav-item">
-                  <a class="nav-link" href="compras.jsp">Compras</a>
+                  <li class="nav-item active">
+                  <a class="nav-link" href="compras.jsp">Compras <span class="sr-only">(current)</span></a>
                 </li>
               </ul>
               <span class="navbar-text">
@@ -82,20 +101,21 @@
                             <div class="col-sm-12" >
                                 <img class="avatar" src="img/logo.png" alt="">
 
-                                <h1>REGISTRO DE VENTAS</h1>
+                                <h1>REGISTRO DE COMPAS</h1>
 
                                 <div class="col-sm-6">
-                                    <label>Nombre del cliente</label>
-                                    <input type="text" <%=id > 0? "readonly":""%> placeholder="Ingrese el nombre del cliente" name="txtNombre" value="<%=id > 0 ?t.getNombre(): ""%>">
+                                    <label>Nombre del proveedor</label>
+                                    <input autocomplete="off"  type="text" <%=id > 0? "readonly":""%> <%=id == 0? "required":""%> placeholder="Ingrese el nombre del cliente" name="txtNombre" value="<%=id > 0 ?t.getNombre(): ""%>">
 
                                 </div>
                                 <div class="col-sm-6">
-                                    <label for="username">No Factura</label>
-                                    <input type="text" <%=id > 0? "readonly":""%> placeholder="No de Factura" name="txtFactura" value="<%=id > 0?t.getFactura():""%>">
+                                    <label for="username">No Factura o comprobante</label>
+                                    <input type="text" <%=id > 0? "readonly":""%> <%=id == 0? "required":""%> placeholder="No de Factura" name="txtFactura" value="<%=id > 0?t.getFactura():""%>">
 
                                 </div>
                                 
                                
+                                    <input type="submit" <%=id > 0? "style='display: none'":""%> name="save" value="REGISTRAR" onclick="swal('success', 'ok', 'success')">
                             </div>
                         </div>
                   
@@ -115,14 +135,33 @@
                             </tr>
                         </thead>
                         <tbody>
+                            <tr>
+                                <td>
+                                    <select <%=id > 0? "required":""%> class="form-control"  name="productoId">
+                                        <option value="">Seleccione</option>
+                                        <%
+                            for(producto p: prods)
+                            {
+                                out.println("<option value='"+ p.getCodigoP() +"'>"+ p.getNombreP() +"</option>");
+                            }
+                            %>
+                                    </select>
+                                </td>
+                                <th>
+                                    <input <%=id > 0? "required":""%> class="form-control" type="number" min="1" placeholder="Cantidad" name="txtCantidad" />
+                                </th>
+                                <th>
+                                    <input type="submit" name="add" value="Agregar" class="btn btn-danger"/>
+                                </th>
+                            </tr>
                             <%
                             for(detalle d: detalles)
                             {
-                                total = total + d.getSubtotal();
+                                total = total + d.getSubtotalCompra();
                                 out.println("<tr>");
                                  out.println("<td>" + d.getProducto()+ "</td>");
                                 out.println("<td>" + d.getCantidad() + "</td>");
-                                out.println("<td class='text-right'>$ " + String.format("%.2f", d.getSubtotal()) + "</td>");
+                                out.println("<td class='text-right'>$ " + String.format("%.2f", d.getSubtotalCompra()) + "</td>");
                                 out.println("</tr>");
                             }
                             %>
@@ -143,8 +182,8 @@
                             </tr>
                         </tfoot>
                     </table>
-                         <hr />
-                            <a href="ventas.jsp" class="btn btn-danger">Regresar</a>
+                            <hr />
+                            <a href="compras.jsp" class="btn btn-danger">Regresar</a>
                 </div>
             </div>
                               </form>

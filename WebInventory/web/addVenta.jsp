@@ -17,17 +17,22 @@
 <%
     //productos = new ProductosBL();
     tran = new TransaccionesBL();
+    int id = 0;
+    double total = 0D;
     transaccion t = new transaccion();
     ArrayList<producto> prods = tran.getProducts();
     ArrayList<detalle> detalles = new ArrayList();
     if(request.getParameter("id") != null)
     {
         detalles = tran.getDetails(request.getParameter("id"));
-        
+        id = Integer.parseInt(request.getParameter("id"));
+        t = tran.getById(request.getParameter("id"));
     }
+    
+    //Guardar el encabezado de la transaccion
      if(request.getParameter("save") != null)
     {
-        int id = tran.insert(new transaccion(0,
+            id = tran.insert(new transaccion(0,
             request.getParameter("txtNombre"),
             new Date(),
             request.getParameter("txtFactura"),
@@ -35,7 +40,17 @@
         ));
         response.sendRedirect("addVenta.jsp?id=" + id);
     }
+     //Agregar detalles
+    if(request.getParameter("add") != null)
+    {
+            tran.addDetail(new detalle(id,
+            Integer.parseInt( request.getParameter("productoId")),
+            Integer.parseInt(request.getParameter("txtCantidad"))
+        ), "venta");
+        response.sendRedirect("addVenta.jsp?id=" + id);
+    }
 %>
+
 <html>
     <head>
         <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
@@ -59,10 +74,10 @@
                 <li class="nav-item">
                   <a class="nav-link" href="index.html">Home</a>
                 </li>
-                <li class="nav-item active">
+                <li class="nav-item">
                   <a class="nav-link" href="productos.jsp">Productos</a>
                 </li>
-               <li class="nav-item">
+               <li class="nav-item active">
                   <a class="nav-link" href="ventas.jsp">Ventas<span class="sr-only">(current)</span></a>
                 </li>
                   <li class="nav-item">
@@ -77,10 +92,11 @@
         
         
         <div class="container">
+             <form method="post" >
             <div class="row">
              
                 <div class="col-sm-12">
-                    <form method="post" >
+                   
                         <div class="registro">
                             <div class="col-sm-12" >
                                 <img class="avatar" src="img/logo.png" alt="">
@@ -89,23 +105,23 @@
 
                                 <div class="col-sm-6">
                                     <label>Nombre del cliente</label>
-                                    <input type="text" placeholder="Ingrese el nombre del cliente" name="txtNombre">
+                                    <input type="text" <%=id > 0? "readonly":""%> <%=id == 0? "required":""%> placeholder="Ingrese el nombre del cliente" name="txtNombre" value="<%=id > 0 ?t.getNombre(): ""%>">
 
                                 </div>
                                 <div class="col-sm-6">
                                     <label for="username">No Factura</label>
-                                    <input type="text" placeholder="No de Factura" name="txtFactura">
+                                    <input type="text" <%=id > 0? "readonly":""%> <%=id == 0? "required":""%> placeholder="No de Factura" name="txtFactura" value="<%=id > 0?t.getFactura():""%>">
 
                                 </div>
                                 
                                
-                                <input type="submit" name="save" value="REGISTRAR" onclick="swal('success', 'ok', 'success')">
+                                    <input type="submit" <%=id > 0? "style='display: none'":""%> name="save" value="REGISTRAR" onclick="swal('success', 'ok', 'success')">
                             </div>
                         </div>
-                    </form>
+                  
                 </div>
             </div>
-            <div class="row">
+            <div class="row" <%=id == 0? "style='display: none'":""%>>
                 <div class="col-sm-12">
                    
                     <h1>Detalles</h1>
@@ -115,28 +131,62 @@
                             <tr>
                                 <th>Producto</th>
                                 <th>Cantidad</th>
-                                <th>Subtotal</th>
-                                <th></th>
+                                <th class="text-right">Subtotal</th>
                             </tr>
                         </thead>
                         <tbody>
-                            <%
-                            /*for(transaccion p: list)
+                            <tr>
+                                <td>
+                                    <select <%=id > 0? "required":""%> class="form-control"  name="productoId">
+                                        <option value="">Seleccione</option>
+                                        <%
+                            for(producto p: prods)
                             {
+                                out.println("<option value='"+ p.getCodigoP() +"'>"+ p.getNombreP() +"</option>");
+                            }
+                            %>
+                                    </select>
+                                </td>
+                                <th>
+                                    <input <%=id > 0? "required":""%> class="form-control" type="number" min="1" placeholder="Cantidad" name="txtCantidad" />
+                                </th>
+                                <th>
+                                    <input type="submit" name="add" value="Agregar" class="btn btn-danger"/>
+                                </th>
+                            </tr>
+                            <%
+                            for(detalle d: detalles)
+                            {
+                                total = total + d.getSubtotal();
                                 out.println("<tr>");
-                                 out.println("<td>" + p.getNombre()+ "</td>");
-                                out.println("<td>" + p.getFactura() + "</td>");
-                                out.println("<td>" + p.getFecha()+ "</td>");
-                                out.println("<td><a class='btn btn-danger' href='viewVenta.jsp?id=" + p.getId()+ "'>Ver</a></td>");
+                                 out.println("<td>" + d.getProducto()+ "</td>");
+                                out.println("<td>" + d.getCantidad() + "</td>");
+                                out.println("<td class='text-right'>$ " + String.format("%.2f", d.getSubtotal()) + "</td>");
                                 out.println("</tr>");
-                            }*/
+                            }
                             %>
                            
                         </tbody>
+                        <tfoot>
+                             <tr>
+                                 <th colspan="2" class="text-right">Sub Total</th>
+                                 <th class="text-right">$ <%=String.format("%.2f",total)%></th>
+                            </tr>
+                              <tr>
+                                 <th colspan="2" class="text-right">IVA</th>
+                                 <th class="text-right">$ <%=String.format("%.2f",total * 0.13D)%></th>
+                            </tr>
+                              <tr>
+                                 <th colspan="2" class="text-right">TOTAL</th>
+                                 <th class="text-right"><h2>$ <%=String.format("%.2f",total * 1.13D)%></h2></th>
+                            </tr>
+                        </tfoot>
                     </table>
-                        
+                            <hr />
+                            <a href="ventas.jsp" class="btn btn-danger">Regresar</a>
                 </div>
             </div>
+                              </form>
         </div>
     </body>
 </html>

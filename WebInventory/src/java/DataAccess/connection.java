@@ -27,7 +27,7 @@ public class connection {
     public void Conectar(){
 
         try {
-            String cadena = "jdbc:postgresql://127.0.0.1:5432/inventariodb";
+            String cadena = "jdbc:postgresql://127.0.0.1:5432/inventarioDB";
              // String cadena = "jdbc:postgresql://shefjekp:OyUnK8lQOcWme8VnR-eZubq-Ua4Lrf4h@baasu.db.elephantsql.com:5432/shefjekp";
             
             

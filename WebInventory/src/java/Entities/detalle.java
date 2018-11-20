@@ -16,15 +16,23 @@ public class detalle {
     private double subtotal;
     private int cantidad;
     private String producto;
+    private double subtotalCompra;
 
-    public detalle(int id, int idTransaccion, int idProducto, double subtotal, int cantidad, String producto) {
+    public detalle(int id, int idTransaccion, int idProducto, double subtotal, int cantidad, String producto, double subtotalCompra) {
         this.id = id;
         this.idTransaccion = idTransaccion;
         this.idProducto = idProducto;
         this.subtotal = subtotal;
         this.cantidad = cantidad;
         this.producto = producto;
-        
+        this.subtotalCompra = subtotalCompra;
+    }
+    
+     public detalle(int idTransaccion, int idProducto, int cantidad) {
+      
+        this.idTransaccion = idTransaccion;
+        this.idProducto = idProducto;
+        this.cantidad = cantidad;        
     }
 
     public int getId() {
@@ -73,6 +81,14 @@ public class detalle {
 
     public void setProducto(String producto) {
         this.producto = producto;
+    }
+
+    public double getSubtotalCompra() {
+        return subtotalCompra;
+    }
+
+    public void setSubtotalCompra(double subtotalCompra) {
+        this.subtotalCompra = subtotalCompra;
     }
     
     

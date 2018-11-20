@@ -55,10 +55,10 @@ public class TransaccionesBL {
         return 0;
     }
     
-    public void addDetail(detalle d)
+    public void addDetail(detalle d, String tipo)
     {
         try {
-            tran.AddDetails(d);
+            tran.AddDetails(d, tipo);
         } catch (SQLException | ClassNotFoundException ex) {
             Logger.getLogger(TransaccionesBL.class.getName()).log(Level.SEVERE, null, ex);
         }
@@ -77,5 +77,8 @@ public class TransaccionesBL {
         return new ArrayList();
     }
     
-    
+    public transaccion getById(String id)
+    {
+        return tran.getById(id);
+    }
 }
