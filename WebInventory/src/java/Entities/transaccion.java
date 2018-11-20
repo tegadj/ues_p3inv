@@ -18,6 +18,10 @@ public class transaccion {
     private String factura;
     private String tipo;
 
+    public transaccion() {
+    }
+
+    
     public transaccion(int id, String nombre, Date fecha, String factura, String tipo) {
         this.id = id;
         this.nombre = nombre;

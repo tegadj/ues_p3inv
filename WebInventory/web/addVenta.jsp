@@ -4,6 +4,9 @@
     Author     : admin
 --%>
 
+<%@page import="java.util.Date"%>
+<%@page import="BusinessLogic.TransaccionesBL"%>
+<%@page import="Entities.detalle"%>
 <%@page import="Entities.transaccion"%>
 <%@page import="BusinessLogic.ProductosBL"%>
 <%@page import="java.util.ArrayList"%>
@@ -13,16 +16,30 @@
 <!DOCTYPE html>
 <%
     //productos = new ProductosBL();
-    
-    ArrayList<transaccion> list = new ArrayList();
-    
-    
-    list = tran.getVentas();
+    tran = new TransaccionesBL();
+    transaccion t = new transaccion();
+    ArrayList<producto> prods = tran.getProducts();
+    ArrayList<detalle> detalles = new ArrayList();
+    if(request.getParameter("id") != null)
+    {
+        detalles = tran.getDetails(request.getParameter("id"));
+        
+    }
+     if(request.getParameter("save") != null)
+    {
+        int id = tran.insert(new transaccion(0,
+            request.getParameter("txtNombre"),
+            new Date(),
+            request.getParameter("txtFactura"),
+            "venta"
+        ));
+        response.sendRedirect("addVenta.jsp?id=" + id);
+    }
 %>
 <html>
     <head>
         <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
-        <title>Ferreteria - registro de ventas</title>
+        <title>Ferreteria - nueva venta</title>
         <meta charset="UTF-8">
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
         <link rel="stylesheet" href="css/master.css">
@@ -62,7 +79,7 @@
         <div class="container">
             <div class="row">
              
-                <!--<div class="col-sm-12">
+                <div class="col-sm-12">
                     <form method="post" >
                         <div class="registro">
                             <div class="col-sm-12" >
@@ -80,34 +97,31 @@
                                     <input type="text" placeholder="No de Factura" name="txtFactura">
 
                                 </div>
-                                <div class="col-sm-6">
-                                    <label for="username">Fecha</label>
-                                    <input type="text" placeholder="Fecha" name="txtFecha">
-                                </div>
+                                
                                
-                                <input type="submit" name="add" value="REGISTRAR" onclick="swal('success', 'ok', 'success')">
+                                <input type="submit" name="save" value="REGISTRAR" onclick="swal('success', 'ok', 'success')">
                             </div>
                         </div>
                     </form>
-                </div>-->
+                </div>
             </div>
             <div class="row">
                 <div class="col-sm-12">
-                    <a class="btn btn-danger" href="addVenta.jsp">Nueva venta</a>
-                    <h1>Listado de ventas</h1>
+                   
+                    <h1>Detalles</h1>
                     <br>
                     <table class="table">
                         <thead>
                             <tr>
-                                <th>Cliente</th>
-                                <th>No factura</th>
-                                <th>Fecha</th>
+                                <th>Producto</th>
+                                <th>Cantidad</th>
+                                <th>Subtotal</th>
                                 <th></th>
                             </tr>
                         </thead>
                         <tbody>
                             <%
-                            for(transaccion p: list)
+                            /*for(transaccion p: list)
                             {
                                 out.println("<tr>");
                                  out.println("<td>" + p.getNombre()+ "</td>");
@@ -115,7 +129,7 @@
                                 out.println("<td>" + p.getFecha()+ "</td>");
                                 out.println("<td><a class='btn btn-danger' href='viewVenta.jsp?id=" + p.getId()+ "'>Ver</a></td>");
                                 out.println("</tr>");
-                            }
+                            }*/
                             %>
                            
                         </tbody>

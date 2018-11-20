@@ -28,7 +28,7 @@ public class TransactionAD {
         this.conexion= conectar.getConexion();
     }
     
-    public void Insertar(transaccion p) throws SQLException, ClassNotFoundException{
+    public int Insertar(transaccion p) throws SQLException, ClassNotFoundException{
         PreparedStatement prepararSentencia = null;
         try{
             String cadenaSql="insert into transacciones (nombre, fecha, numerofac, tipo) "
@@ -38,8 +38,23 @@ public class TransactionAD {
                     + "'venta');";
             prepararSentencia = this.conexion.prepareStatement(cadenaSql);
             prepararSentencia.executeUpdate();
+            
+            //Devolver el ultimo registro
+            Statement stm = conexion.createStatement();
+            ResultSet rs = stm.executeQuery("select max(idtransaccion) id"
+                + "from transacciones " +
+                  " where nombre = '" + p.getNombre() + "'");
+
+            int id = 0;
+            while(rs.next())
+            {
+               id = rs.getInt("id");
+
+            }
+            return id;
         }
         catch(Exception e){}
+        return 0;
     }
     
      public void AddDetails(detalle p) throws SQLException, ClassNotFoundException{

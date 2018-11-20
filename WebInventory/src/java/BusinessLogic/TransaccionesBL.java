@@ -7,6 +7,7 @@ package BusinessLogic;
 
 import DataAccess.TransactionAD;
 import Entities.detalle;
+import Entities.producto;
 import Entities.transaccion;
 import java.sql.SQLException;
 import java.util.ArrayList;
@@ -44,13 +45,14 @@ public class TransaccionesBL {
         return tran.getDetails(id);
     }
     
-    public void insert(transaccion o)
+    public int insert(transaccion o)
     {
         try {
-            tran.Insertar(o);
+            return tran.Insertar(o);
         } catch (SQLException | ClassNotFoundException ex) {
             Logger.getLogger(TransaccionesBL.class.getName()).log(Level.SEVERE, null, ex);
         }
+        return 0;
     }
     
     public void addDetail(detalle d)
@@ -60,6 +62,19 @@ public class TransaccionesBL {
         } catch (SQLException | ClassNotFoundException ex) {
             Logger.getLogger(TransaccionesBL.class.getName()).log(Level.SEVERE, null, ex);
         }
+    }
+    
+    public ArrayList<producto> getProducts()
+    {
+        try {
+            ProductosBL prod = new ProductosBL();
+            return prod.get();
+        } catch (SQLException ex) {
+            Logger.getLogger(TransaccionesBL.class.getName()).log(Level.SEVERE, null, ex);
+        } catch (ClassNotFoundException ex) {
+            Logger.getLogger(TransaccionesBL.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        return new ArrayList();
     }
     
     
